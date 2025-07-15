@@ -60,3 +60,8 @@ form button:hover {
     font-size: 50px;
     color: #fff;
 }
+
+small{
+    padding: 10px;
+    background-color: rgba(0, 123, 255, 0.3);
+}

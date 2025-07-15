@@ -7,7 +7,8 @@ app.set("view engine", "ejs")
 app.use(express.urlencoded())
 
 let db = []
-let db2 = []
+let db2 = ""
+let error = ""
 
 // Serve public folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -17,23 +18,31 @@ app.get("/", (req, res) => {
 })
 
 app.get("/login", (req, res) => {
-    res.render("login", {db})
+    res.render("login", { db, error })
 })
 
 app.get("/dash", (req, res) => {
-    res.render("dash", {db2})
+
+    if (db2) {
+       return res.render("dash", {db2})
+    }
+        return res.redirect("/login")
+
 })
 
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
     const user = db.find(user => user.email === email && user.password === password);
-    
+    // globalUser = user
     if (user) {
-        db2.push(user)
+
+        db2 = user.username;
+        console.log(db2);
+
         res.redirect("/dash");
     } else {
-        res.send("User not found or wrong credentials.");
-        res.redirect("/dash");
+        error = "Invalid!"
+        res.redirect("/login");
     }
 
     // app.get("/dash", (req, res) => {
